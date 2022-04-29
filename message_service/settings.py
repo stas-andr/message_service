@@ -127,3 +127,4 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 TIMEZONES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
+
