@@ -23,11 +23,12 @@ class MobileOperator(models.Model):
     name = models.CharField(max_length=32, verbose_name="Имя мобильного оператора")
 
     def __str__(self):
-        return f'{self.name} c кодом: {self.code}'
+        return self.code
 
     class Meta:
         verbose_name = 'Мобильный оператор'
         verbose_name_plural = "Мобильные операторы"
+        ordering = ['code']
 
 
 class GroupClients(models.Model):
@@ -35,7 +36,7 @@ class GroupClients(models.Model):
     name = models.CharField(max_length=32, verbose_name='Имя группы пользователей')
 
     def __str__(self):
-        return f'{self.name} с тегом: {self.tag}'
+        return self.tag
 
     class Meta:
         verbose_name = 'Группа клиентов'
@@ -45,13 +46,13 @@ class GroupClients(models.Model):
 class Client(models.Model):
     phone_number_regex = RegexValidator(regex = r'^7\d{10}$')
     phone_number = models.CharField(validators=[phone_number_regex], max_length=11, unique=True, null=False)
-    mobile_operator = models.ForeignKey(MobileOperator, on_delete=models.DO_NOTHING, verbose_name='Код мобильного оператора'),
-    group_clients = models.ForeignKey(GroupClients, on_delete=models.CASCADE),
+    mobile_operator = models.ForeignKey('MobileOperator', on_delete=models.DO_NOTHING, verbose_name='Код мобильного оператора'),
+    group_clients = models.ForeignKey('GroupClients', on_delete=models.CASCADE),
     timezone = models.CharField(max_length=32, choices=settings.TIMEZONES,
                                 default='UTC')
 
     def __str__(self):
-        return f'Номер телефона: {self.phone_number}, мобильный оператор: {self.mobile_operator}'
+        return self.phone_number
 
     class Meta:
         verbose_name = 'Клиент'
