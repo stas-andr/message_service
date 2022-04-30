@@ -45,7 +45,7 @@ class GroupClients(models.Model):
 class Client(models.Model):
     phone_number_regex = RegexValidator(regex = r'^7\d{10}$')
     phone_number = models.CharField(validators=[phone_number_regex], max_length=11, unique=True, null=False)
-    mobile_operator = models.ForeignKey(MobileOperator, on_delete=models.DO_NOTHING),
+    mobile_operator = models.ForeignKey(MobileOperator, on_delete=models.DO_NOTHING, verbose_name='Код мобильного оператора'),
     group_clients = models.ForeignKey(GroupClients, on_delete=models.CASCADE),
     timezone = models.CharField(max_length=32, choices=settings.TIMEZONES,
                                 default='UTC')
