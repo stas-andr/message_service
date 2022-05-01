@@ -2,7 +2,8 @@ from django.contrib import admin
 from main.models import Client, Message, MailList, GroupClients, MobileOperator
 
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ('phone_number', 'mobile_operator','timezone')
+    pass
+    # list_display = ('phone_number', 'mobile_operator','timezone')
 
 
 admin.site.register(MobileOperator)
