@@ -1,16 +1,10 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Message, Client, MobileOperator, MailList, GroupClients
+from main.models import Message, Client, MobileOperator, MailList, GroupClients
 
 
 class MailListSerializer(ModelSerializer):
     class Meta:
         model = MailList
-        fields = "__all__"
-
-
-class MessageSerializer(ModelSerializer):
-    class Meta:
-        model = Message
         fields = "__all__"
 
 
