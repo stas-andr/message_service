@@ -1,18 +1,33 @@
-from cerberus import Validator
-
 from django.db import models
 from django.conf import settings
 from django.core.validators import RegexValidator
+from jsonschema import validate
+from django.core.validators import BaseValidator
 
-SCHEMA_FILTER_JSON = {'tags': {'type': 'array'},
-                      'mobile_operators': {'type': 'array'}}
+SCHEMA_FILTER_JSON = {
+    'type': 'object',
+    'schema': 'http://json-schema.org/draft-07/schema#',
+    'properties': {
+        'tags': {
+            'type': 'array'
+        },
+        'mobile_operators': {
+            'type': 'array'}
+    },
+    'anyOf': ['tags', 'mobile_operators']
+}
+
+
+class JSONSchemaValidator(BaseValidator):
+    def compare(self, a, b):
+        return validate(a, b)
 
 
 class MailList(models.Model):
     datetime_start = models.DateTimeField(verbose_name='Дата и время запуска рассылки')
     text = models.TextField(verbose_name='Текст сообщения для доставки клиенту')
     datetime_stop = models.DateTimeField(verbose_name='Дата и время окончания рассылки')
-    filter = models.JSONField()
+    filter = models.JSONField(validators=[JSONSchemaValidator(limit_value=SCHEMA_FILTER_JSON)])
 
     def __str__(self):
         return f'{self.text}, начинается {self.datetime_start}, кончается {self.datetime_stop}'
