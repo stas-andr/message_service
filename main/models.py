@@ -1,6 +1,11 @@
+from cerberus import Validator
+
 from django.db import models
 from django.conf import settings
 from django.core.validators import RegexValidator
+
+SCHEMA_FILTER_JSON = {'tags': {'type': 'array'},
+                      'mobile_operators': {'type': 'array'}}
 
 
 class MailList(models.Model):
