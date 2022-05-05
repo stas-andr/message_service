@@ -1,6 +1,9 @@
 from django.db import models
 from django.conf import settings
 from django.core.validators import RegexValidator
+from django.db.models.signals import post_save
+
+from .service import post_save_maillist
 
 
 class MailList(models.Model):
@@ -15,6 +18,9 @@ class MailList(models.Model):
     class Meta:
         verbose_name = 'Рассылка'
         verbose_name_plural = "Рассылки"
+
+
+post_save.connect(post_save_maillist, sender=MailList)
 
 
 class GroupClients(models.Model):
