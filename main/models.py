@@ -4,17 +4,20 @@ from django.core.validators import RegexValidator
 from jsonschema import validate
 from django.core.validators import BaseValidator
 
+from django.db.models.signals import post_save
+from .service import post_save_maillist
+
 SCHEMA_FILTER_JSON = {
     'type': 'object',
     'schema': 'http://json-schema.org/draft-07/schema#',
     'properties': {
-        'tags': {
-            'type': 'array'
-        },
-        'mobile_operators': {
-            'type': 'array'}
+        'tags': {'type': 'array'},
+        'mobile_operators': {'type': 'array'}
     },
-    'anyOf': ['tags', 'mobile_operators']
+    'anyOf': [
+        {'required': ['tags']},
+        {'required': ['mobile_operator']}
+    ]
 }
 
 
@@ -35,6 +38,9 @@ class MailList(models.Model):
     class Meta:
         verbose_name = 'Рассылка'
         verbose_name_plural = "Рассылки"
+
+
+post_save.connect(post_save_maillist, sender=MailList)
 
 
 class GroupClients(models.Model):
