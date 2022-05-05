@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.validators import RegexValidator
 from jsonschema import validate
 from django.core.validators import BaseValidator
+from django.core.exceptions import ValidationError
 
 from django.db.models.signals import post_save
 from .service import post_save_maillist
@@ -23,7 +24,12 @@ SCHEMA_FILTER_JSON = {
 
 class JSONSchemaValidator(BaseValidator):
     def compare(self, a, b):
-        return validate(a, b)
+        try:
+            result = validate(a, b)
+        except Exception as e:
+            raise ValidationError(e)
+        else:
+            return result
 
 
 class MailList(models.Model):
@@ -44,7 +50,7 @@ post_save.connect(post_save_maillist, sender=MailList)
 
 
 class GroupClients(models.Model):
-    tag = models.CharField(max_length=32, verbose_name='Тег (произвольная метка)', null=False)
+    tag = models.CharField(max_length=32, verbose_name='Тег (произвольная метка)')
     name = models.CharField(max_length=32, verbose_name='Имя группы пользователей')
 
     def __str__(self):
@@ -57,7 +63,7 @@ class GroupClients(models.Model):
 
 class MobileOperator(models.Model):
     code_regex = RegexValidator(regex = r'^\d{2,3}$')
-    code = models.CharField(max_length=3, validators=[code_regex], null=False)
+    code = models.CharField(max_length=3, validators=[code_regex])
     name = models.CharField(max_length=32)
 
     def __str__(self):
