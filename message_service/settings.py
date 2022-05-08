@@ -144,7 +144,9 @@ env = environ.Env(
 # reading .env file
 environ.Env.read_env()
 
-auth_headers = {
+AUTH_HEADERS = {
         'Authorization': f'Bearer {env("TOKEN")}',
         'Content-Type': 'application/json'
 }
+
+URL_SERVICE_SEND_MESSAGE = "https://probe.fbrq.cloud/v1/send/"
