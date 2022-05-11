@@ -5,8 +5,6 @@ from jsonschema import validate
 from django.core.validators import BaseValidator
 from django.core.exceptions import ValidationError
 
-from django.db.models.signals import post_save
-from .service import post_save_maillist
 
 SCHEMA_FILTER_JSON = {
     'type': 'object',
@@ -47,9 +45,6 @@ class MailList(models.Model):
     class Meta:
         verbose_name = 'Рассылка'
         verbose_name_plural = "Рассылки"
-
-
-post_save.connect(post_save_maillist, sender=MailList)
 
 
 class GroupClients(models.Model):
@@ -96,10 +91,11 @@ class Client(models.Model):
 class Message(models.Model):
     STATUSES_SENDING = (
         (1, "Отправлено"),
-        (0, "Не отправлено"),
+        (0, "Ошибка при отправке"),
+        (2, "Создано")
     )
     datetime_sending = models.DateTimeField(auto_now_add=True, verbose_name='Дата отправки')
-    status_sending = models.IntegerField(choices=STATUSES_SENDING, verbose_name='Статус отправки', default=0)
+    status_sending = models.IntegerField(choices=STATUSES_SENDING, verbose_name='Статус отправки', default=2)
     mail_list = models.ForeignKey(MailList, on_delete=models.CASCADE, verbose_name='Рассылка')
     client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name="Клиент")
 
