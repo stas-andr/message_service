@@ -8,8 +8,14 @@ def post_save_maillist(sender, instance:MailList, created,  **kwargs):
     print("post_save_maillist")
     if created:
         filter = instance.filter
-        mobile_operators = filter["mobile_operators"]
-        tags = filter["tags"]
+        mobile_operators = []
+        tags = []
+        try:
+            mobile_operators = filter["mobile_operators"]
+            tags = filter["tags"]
+        except KeyError:
+            # одно из полей точно заполнено
+            pass
         clients = Client.objects.filter(Q(tag__name__in=tags) | Q(mobile_operator__name__in=mobile_operators))
         if datetime.now() <= instance.datetime_stop and datetime.now() >= instance.datetime_stop:
             # отправить сообщения из рассылки
