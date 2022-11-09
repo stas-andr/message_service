@@ -24,3 +24,8 @@ class GroupClientsSerializer(ModelSerializer):
     class Meta:
         model = GroupClients
         fields = "__all__"
+
+class MessageSerializer(ModelSerializer):
+    class Meta:
+        model = Message
+        fields = "__all__"
