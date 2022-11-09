@@ -35,8 +35,8 @@ class MailList(models.Model):
     text = models.TextField(verbose_name='Текст сообщения для доставки клиенту')
     datetime_stop = models.DateTimeField(verbose_name='Дата и время окончания рассылки')
     filter = models.JSONField(validators=[JSONSchemaValidator(limit_value=SCHEMA_FILTER_JSON)])
-    # если сообщение не отправилось, повторить через interval_minutes_failed_message, по дефолту 1 сутки
-    interval_minutes_failed_message = models.IntegerField(default=24*60,
+    # если сообщение не отправилось, повторить через interval_minutes_failed_message, по дефолту 5 минут
+    interval_minutes_failed_message = models.IntegerField(default=5,
         verbose_name='Через сколько минут повторить неудачную отправку')
 
     def __str__(self):
@@ -105,5 +105,8 @@ class Message(models.Model):
     class Meta:
         verbose_name = 'Сообщение'
         verbose_name_plural = "Сообщения"
+
+
+#
 
 

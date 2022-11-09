@@ -15,9 +15,9 @@ def create_messages(mail_list, clients, sending_datetime):
     """
     for client in clients:
         message = Message(client=client, datetime_sending=datetime.now(), mail_list=mail_list)
-        send_message.apply_async((message, mail_list.interval_minutes_failed_message), eta=sending_datetime)
+        send_message.apply_async((message.pk, mail_list.interval_minutes_failed_message), eta=sending_datetime)
 
-def post_save_maillist(sender, instance:MailList, created,  **kwargs):
+def post_save_maillist(sender, instance: MailList, created,  **kwargs):
     print("post_save_maillist")
     if created:
         filter = instance.filter
