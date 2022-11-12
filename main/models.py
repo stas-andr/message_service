@@ -107,6 +107,4 @@ class Message(models.Model):
         verbose_name_plural = "Сообщения"
 
 
-#
-
 

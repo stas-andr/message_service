@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
+    'message_service',
     'rest_framework',
     'corsheaders',
     'api.apps.ApiConfig'
@@ -150,3 +151,6 @@ AUTH_HEADERS = {
 }
 
 URL_SERVICE_SEND_MESSAGE = "https://probe.fbrq.cloud/v1/send/"
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'

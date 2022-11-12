@@ -14,12 +14,14 @@ def create_messages(mail_list, clients, sending_datetime):
     create and send messages for clients in mail_list in sending_datetime
     """
     for client in clients:
-        message = Message(client=client, datetime_sending=datetime.now(), mail_list=mail_list)
+        message = Message.objects.create(client=client, datetime_sending=datetime.now(), mail_list=mail_list)
+        print(sending_datetime)
         send_message.apply_async((message.pk, mail_list.interval_minutes_failed_message), eta=sending_datetime)
 
 def post_save_maillist(sender, instance: MailList, created,  **kwargs):
-    print("post_save_maillist")
+    print("created = ", created)
     if created:
+        print ("post_save")
         filter = instance.filter
         try:
             mobile_operators = filter["mobile_operators"]
@@ -29,6 +31,7 @@ def post_save_maillist(sender, instance: MailList, created,  **kwargs):
             tags = filter["tags"]
         except KeyError:
             tags = []
+        print("post_save_after_check")
         clients = Client.objects.filter(Q(tag__tag__in=tags) | Q(mobile_operator__name__in=mobile_operators))
         datetime_now = timezone.localize(datetime.now())
         if datetime_now <= instance.datetime_stop and datetime_now >= instance.datetime_start:

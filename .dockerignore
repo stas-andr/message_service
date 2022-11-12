@@ -1,0 +1,17 @@
+*.pyc
+*.pyo
+*.mo
+*.db
+.cache
+.gitignore
+.project
+.idea
+.pydevproject
+.idea/workspace.xml
+.DS_Store
+.git/
+.vagrant/
+__pycache__
+env
+logs
+Dockerfile
